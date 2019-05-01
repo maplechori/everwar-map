@@ -1,5 +1,7 @@
-   var THREE = require('three');
-   var createPanZoom = require('three.map.control');
+   import React, { Component } from 'react';
+   import * as THREE from 'three'; 
+   import * as ansi from 'ansicolor';
+   import * as createPanZoom from 'three.map.control';
 
    var scene = new THREE.Scene();
    var camera = new THREE.PerspectiveCamera( 50, window.innerWidth/window.innerHeight, 1, 2000 );
@@ -14,7 +16,7 @@
    document.body.appendChild( renderer.domElement );
 
    function makeCube(x,y,z, color) {
-        cube = new THREE.Mesh( new THREE.CubeGeometry(0.5,0.5,0.5) , new THREE.MeshBasicMaterial( { color: (color ? color : "orange")  } ));
+        var cube = new THREE.Mesh( new THREE.CubeGeometry(0.5,0.5,0.5) , new THREE.MeshBasicMaterial( { color: (color ? color : "orange")  } ));
         cube.position.x = x;
         cube.position.y = y;
         cube.position.z = z;
@@ -79,18 +81,16 @@
 
    function bfs(rooms)
    {
-
        while(room_stack.length)
        { 
-
-          current = room_stack.pop();
+          var current = room_stack.pop();
            
-          for (j in getExits(current))
+          for (var j in getExits(current))
           {   
              if (current.exits[j] == 0)
                  continue;
                
-             new_room = rooms[current.exits[j]];
+             var new_room = rooms[current.exits[j]];
 
              if (j  == "south") {
                 new_room.x = current.x;
@@ -118,44 +118,29 @@
                 new_room.z = current.z + 1;
              }
 
-            /* Do only a flat view for now */
              if (!new_room.visited)
              {
                  new_room.color = getColorFromSector(new_room.sector);
 
                  if (new_room.x == 0 && new_room.y == 0 && new_room.z == 0)
-                 {
                      new_room.color = "red";
-                 }
-
-                 if (new_room.x == 0 && new_room.y == 0 && new_room.z != 0)
-                 {
-                     console.log(new_room.sector);
-                     console.log(j);
-                 }
-
-
                                                              
                  scene.add(makeCube(new_room.x, new_room.y, new_room.z, new_room.color));      
                  new_room.visited = true;
                  room_stack.unshift(new_room);
              }
-
-           
           }
-
        }
-       
    } 
 
 
-   CENTER = 6232;
+   var CENTER = 6232;
 
    fetch("mud.json")  
     .then(response => response.json())
     .then( (roomsMap) => {
             
-            center = roomsMap[CENTER]; 
+            var center = roomsMap[CENTER]; 
           
             center.x = 0;
             center.y = 0;
@@ -167,14 +152,27 @@
             
             bfs(roomsMap);
 
-     });
+    });
 
    camera.position.z = 100;
 
-   var animate = function () {
+   var animate = function () 
+   {
      requestAnimationFrame( animate );
      renderer.render( scene, camera );
    }; 
 
    animate();
+
+   class EverwarMap extends Component {
+
+       componentDidMount()
+       {
+
+       }
+
+       render() {
+           return (<div></div>);
+       }
+   }
 
