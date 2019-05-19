@@ -12,8 +12,7 @@
    var parsed = convert.toHtml(ansi_str);
 
 
-const MapElement = function(c)  {
-   const center = c;
+const MapElement = function(center)  {
    var renderer = null; 
    const scene = new THREE.Scene();
    const camera = new THREE.PerspectiveCamera( 50, window.innerWidth/window.innerHeight, 1, 2000 );
